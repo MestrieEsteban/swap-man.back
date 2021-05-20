@@ -26,7 +26,7 @@ io.on("connection", function (socket: any) {
 	socket.on("createRoom", function (room: string, name: string) {
 		socket.join([room]);
 		rooms[room] = { user1: name, user2: "" }
-		console.log(`${name} join room : ${room}`);
+		console.log(`${name} create room : ${room}`);
 		io.in(room).emit('user', rooms[room])
 	});
 	socket.on("joinRoom", function (room: string, name: string) {
