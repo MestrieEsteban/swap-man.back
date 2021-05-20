@@ -1,20 +1,73 @@
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-  </head>
-  <body>
-    <button onClick="sendMsg()">Hello from front</button>
 
-<script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
-    <script>
-      const socket = io("http://localhost:3000");
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Document</title>
+</head>
 
-      function sendMsg() {
-        socket.emit("message", "HELLO WORLD");
-      }
-    </script>
-  </body>
+<span id="joinCode"></span>
+<span class="name">Name : </span>
+<input class="nameInput" type="text">
+<button class="createButton" style="display:block" onClick="createRoom()">Create room</button>
+<button class="JoinButton" style="display:block" onClick="joinRoom()">Join room</button>
+<span class="joinText" style="display:none">Room code</span>
+<input class="joinInput" type="text" style="display:none">
+<button class="join" style="display:none" onClick="joinRoomSelect()">Join</button>
+<br>
+<span>User in room :</span>
+<br>
+<span id="test"></>
+
+<script src="https://cdn.socket.io/3.1.3/socket.io.min.js"
+	integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
+	crossorigin="anonymous"></script>
+<script>
+	const socket = io("http://localhost:3000");
+
+	socket.on('user', (user) => {
+		console.log(user)
+		document.getElementById("test").innerHTML = `User 1 : ${user.user1} <br> User 2 : ${user.user2}`;
+
+	})
+
+	function createRoom() {
+		document.getElementsByClassName('createButton')[0].style.display = 'none';
+		document.getElementsByClassName('JoinButton')[0].style.display = 'none';
+		document.getElementsByClassName('name')[0].style.display = 'none';
+		document.getElementsByClassName('nameInput')[0].style.display = 'none';
+		let room = getRandomString(6);
+		let name = document.getElementsByClassName("nameInput")[0].value
+		document.getElementById("joinCode").textContent = `Code to join the game : ${room}`;
+		socket.emit("createRoom", room, name);
+	}
+
+	function joinRoom() {
+		document.getElementsByClassName('createButton')[0].style.display = 'none';
+		document.getElementsByClassName('name')[0].style.display = 'none';
+		document.getElementsByClassName('nameInput')[0].style.display = 'none';
+		document.getElementsByClassName('JoinButton')[0].style.display = 'none';
+		document.getElementsByClassName('joinInput')[0].style.display = 'block';
+		document.getElementsByClassName('join')[0].style.display = 'block';
+		document.getElementsByClassName('joinText')[0].style.display = 'block';
+	}
+
+	function joinRoomSelect() {
+		let room = document.getElementsByClassName("joinInput")[0].value
+		let name = document.getElementsByClassName("nameInput")[0].value
+		socket.emit("joinRoom", room, name)
+	}
+
+	function getRandomString(length) {
+		var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		var result = '';
+		for (var i = 0; i < length; i++) {
+			result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+		}
+		return result;
+	}
+</script>
+</body>
+
 </html>

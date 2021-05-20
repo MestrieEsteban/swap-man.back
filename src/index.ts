@@ -1,4 +1,4 @@
-import  express from "express";
+import express from "express";
 import * as socketio from "socket.io";
 import * as path from "path";
 
@@ -13,11 +13,22 @@ app.get("/", (req: any, res: any) => {
 	res.sendFile(path.resolve("./src/client/index.html"));
 });
 
+var rooms: any = {}
+
 io.on("connection", function (socket: any) {
-	console.log("a user connected");
-	socket.on("message", function (message: any) {
-		console.log(message);
+	socket.on("createRoom", function (room: string, name: string) {
+		socket.join([room]);
+		rooms[room] = { user1: name, user2: "" }
+		console.log(`${name} join room : ${room}`);
+		io.in(room).emit('user', rooms[room])
 	});
+	socket.on("joinRoom", function (room: string, name: string) {
+		socket.join(room);
+		rooms[room].user2 = name
+		console.log(`${name} join room : ${room}`);
+		io.in(room).emit('user', rooms[room])
+	});
+
 });
 
 const server = http.listen(3000, function () {
