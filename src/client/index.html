@@ -18,7 +18,7 @@
 <br>
 <span>User in room :</span>
 <br>
-<span id="test"></>
+<span id="test"></span>
 
 <script src="https://cdn.socket.io/3.1.3/socket.io.min.js"
 	integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh"
@@ -60,9 +60,9 @@
 	}
 
 	function getRandomString(length) {
-		var randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-		var result = '';
-		for (var i = 0; i < length; i++) {
+		const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		let result = '';
+		for (let i = 0; i < length; i++) {
 			result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
 		}
 		return result;
