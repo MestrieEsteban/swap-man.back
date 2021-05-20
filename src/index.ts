@@ -1,19 +1,26 @@
 import express from "express";
-import * as socketio from "socket.io";
 import * as path from "path";
 
 const app = express();
+let httpServer = require("http").Server(app);
+
+const io = require('socket.io')(httpServer, {
+	cors: {
+		origin: "http://localhost:8080",
+		methods: ["GET", "POST"],
+		transports: ['websocket', 'polling'],
+		credentials : true
+	},
+	allowEIO3: true
+});
+
 app.set("port", process.env.PORT || 3000);
-
-let http = require("http").Server(app);
-
-let io = require("socket.io")(http);
 
 app.get("/", (req: any, res: any) => {
 	res.sendFile(path.resolve("./src/client/index.html"));
 });
 
-var rooms: any = {}
+let rooms: any = {}
 
 io.on("connection", function (socket: any) {
 	socket.on("createRoom", function (room: string, name: string) {
@@ -31,6 +38,6 @@ io.on("connection", function (socket: any) {
 
 });
 
-const server = http.listen(3000, function () {
+const server = httpServer.listen(3000, function () {
 	console.log("listening on http://localhost:3000/");
 });
