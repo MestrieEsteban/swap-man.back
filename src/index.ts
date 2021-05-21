@@ -35,6 +35,22 @@ io.on("connection", function (socket: any) {
 		console.log(`${name} join room : ${room}`);
 		io.in(room).emit('user', rooms[room])
 	});
+	socket.on("SenderUp", function (room: string, type: string) {	
+			
+		socket.to(room).emit("Up", type)
+	})
+	socket.on("SenderDown", function (room: string, type: string) {
+		socket.to(room).emit("Down", type)
+	})
+	socket.on("SenderLeft", function (room: string, type: string) {
+		socket.to(room).emit("Left", type)
+	})
+	socket.on("SenderRight", function (room: string, type: string) {
+		socket.to(room).emit("Right", type)
+	})
+	socket.on("SenderClear", function (room: string, type: string) {
+		socket.to(room).emit("Clear", type)
+	})
 
 });
 

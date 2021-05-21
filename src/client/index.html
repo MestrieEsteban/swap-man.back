@@ -10,16 +10,8 @@
 		crossorigin="anonymous"></script>
 </head>
 
-<body  onload="startGame()">
-	<div style="text-align:center;width:480px;">
-		<button onmousedown="moveup()" onmouseup="clearmove()" ontouchstart="moveup()">UP</button><br><br>
-		<button onmousedown="moveleft()" onmouseup="clearmove()" ontouchstart="moveleft()">LEFT</button>
-		<button onmousedown="moveright()" onmouseup="clearmove()" ontouchstart="moveright()">RIGHT</button><br><br>
-		<button onmousedown="movedown()" onmouseup="clearmove()" ontouchstart="movedown()">DOWN</button>
-	</div>
-	<a href="https://fontmeme.com/pac-man-font/"><img
-			src="https://fontmeme.com/permalink/210520/d3d19ccb10786c8942b87a9f0f03e0c2.png" alt="pac-man-font"
-			border="0"></a>
+<body>
+	<img src="https://fontmeme.com/permalink/210520/d3d19ccb10786c8942b87a9f0f03e0c2.png" alt="pac-man-font" border="0">
 	<br>
 	<br>
 	<span id="joinCode"></span>
@@ -34,6 +26,8 @@
 	<span class="userRoom" style="display:none">User in room :</span>
 	<br>
 	<span id="test"></span>
+	<input id="room" type="hidden">
+	<input id="playerType" type="hidden">
 
 </body>
 
@@ -43,8 +37,12 @@
 	socket.on('user', (user) => {
 		console.log(user)
 		document.getElementById("test").innerHTML = `User 1 : ${user.user1} <br> User 2 : ${user.user2}`;
+		if (user.user2 != "") {
+			startGame()
+		}
 
 	})
+
 
 	function createRoom() {
 		document.getElementsByClassName('createButton')[0].style.display = 'none';
@@ -53,6 +51,8 @@
 		document.getElementsByClassName('nameInput')[0].style.display = 'none';
 		document.getElementsByClassName('userRoom')[0].style.display = 'block';
 		let room = getRandomString(6);
+		document.getElementById("room").value = room;
+		document.getElementById("playerType").value = "player1";
 		let name = document.getElementsByClassName("nameInput")[0].value
 		document.getElementById("joinCode").textContent = `Code to join the game : ${room}`;
 		socket.emit("createRoom", room, name);
@@ -75,6 +75,8 @@
 		document.getElementsByClassName('joinInput')[0].style.display = 'none';
 		document.getElementsByClassName('join')[0].style.display = 'none';
 		document.getElementsByClassName('joinText')[0].style.display = 'none';
+		document.getElementById("room").value = room
+		document.getElementById("playerType").value = "player2";
 
 		socket.emit("joinRoom", room, name)
 	}
@@ -89,11 +91,11 @@
 	}
 </script>
 <script>
-
 	var myGamePiece;
 
 	function startGame() {
-		myGamePiece = new component(30, 30, "https://www.w3schools.com/graphics/smiley.gif", 10, 120, "image");
+		myGamePiece = new component(30, 30, "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Pacman.svg/1200px-Pacman.svg.png", 10, 120, "image");
+		myGamePiece2 = new component(30, 30, "http://assets.stickpng.com/images/580b57fcd9996e24bc43c316.png", 20, 130, "image");
 		myGameArea.start();
 	}
 
@@ -149,28 +151,110 @@
 		myGameArea.clear();
 		myGamePiece.newPos();
 		myGamePiece.update();
+		myGamePiece2.newPos();
+		myGamePiece2.update();
 	}
 
-	function moveup() {
-		myGamePiece.speedY = -1;
+	function moveup(type) {
+		if (type == "player1") {
+			clearmovePacman()
+			myGamePiece.speedY = -1;
+		} else {
+			clearmoveGhost()
+			myGamePiece2.speedY = -1;
+		}
 	}
+	socket.on('Up', (type) => {
+		moveup(type)
+	})
 
-	function movedown() {
-		myGamePiece.speedY = 1;
+	function movedown(type) {
+		if (type == "player1") {
+			clearmovePacman()
+			myGamePiece.speedY = 1;
+		} else {
+			clearmoveGhost()
+			myGamePiece2.speedY = 1;
+		}
+
 	}
+	socket.on('Down', (type) => {
+		movedown(type)
+	})
 
-	function moveleft() {
-		myGamePiece.speedX = -1;
+	function moveleft(type) {
+		if (type == "player1") {
+			clearmovePacman()
+			myGamePiece.speedX = -1;
+		} else {
+			clearmoveGhost()
+			myGamePiece2.speedX = -1;
+		}
+
 	}
-
-	function moveright() {
-		myGamePiece.speedX = 1;
+	socket.on('Left', (type) => {
+		moveleft(type)
+	})
+	
+	function moveright(type) {
+		if (type == "player1") {
+			clearmovePacman()
+			myGamePiece.speedX = 1;
+		} else {
+			clearmoveGhost()
+			myGamePiece2.speedX = 1;
+		}
 	}
+	socket.on('Right', (type) => {
+		moveright(type)
+	})
+	
+	function clear(type) {
+		if (type == "player1") {
+			clearmovePacman()
+		} else {
+			clearmoveGhost()
+		}
 
-	function clearmove() {
+	}
+	socket.on('Clear', (type) => {
+			clear(type)
+		})
+
+	function clearmovePacman() {
 		myGamePiece.speedX = 0;
 		myGamePiece.speedY = 0;
 	}
+	function clearmoveGhost() {
+		myGamePiece2.speedX = 0;
+		myGamePiece2.speedY = 0;
+	}
+	document.addEventListener('keydown', function (e) {
+		let type = document.getElementById("playerType").value
+		let room = document.getElementById("room").value
+		switch (e.keyCode) {
+			case 37:
+				socket.emit("SenderLeft", room, type);
+				moveleft(type)
+				break;
+			case 38:
+				socket.emit("SenderUp", room, type);
+				moveup(type)
+				break;
+			case 39:
+				socket.emit("SenderRight", room, type);
+				moveright(type)
+				break;
+			case 40:
+				socket.emit("SenderDown", room, type);
+				movedown(type)
+				break;
+			case 32:
+				socket.emit("SenderClear", room, type);
+				clear(type)
+				break;
+		}
+	});
 </script>
 
 </html>
