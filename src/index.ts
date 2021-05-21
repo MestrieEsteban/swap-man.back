@@ -17,7 +17,7 @@ var rooms: any = {}
 
 io.on("connection", function (socket: any) {
 	socket.on("createRoom", function (room: string, name: string) {
-		socket.join([room]);
+		socket.join(room);
 		rooms[room] = { user1: name, user2: "" }
 		console.log(`${name} join room : ${room}`);
 		io.in(room).emit('user', rooms[room])
@@ -30,6 +30,10 @@ io.on("connection", function (socket: any) {
 	});
 
 });
+
+io.on('disconnect', function (socket: any) {
+	console.log(socket);
+ 	});
 
 const server = http.listen(3000, function () {
 	console.log("listening on http://localhost:3000/");
