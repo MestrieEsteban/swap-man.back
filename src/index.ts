@@ -35,6 +35,20 @@ io.on("connection", function (socket: any) {
 		console.log(`${name} join room : ${room}`);
 		io.in(room).emit('user', rooms[room])
 	});
+	socket.on("startGame", function (room: string) {
+		io.in(room).emit('startGame')
+	});
+	socket.on("pacmanMove", function (pacman: any, room: string) {
+		socket.to(room).emit("pacmanMove", pacman)
+	});
+	socket.on("Player2Move", function (pacman: any, room: string) {
+		socket.to(room).emit("Player2Move", pacman)
+	});
+
+
+
+
+
 	socket.on("SenderUp", function (room: string, type: string) {	
 			
 		socket.to(room).emit("Up", type)
