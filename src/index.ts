@@ -72,6 +72,6 @@ io.on('disconnect', function (socket: any) {
 	console.log(socket);
  	});
 
-const server = httpServer.listen(5000, function () {
+const server = httpServer.listen(3000, function () {
 	console.log("listening on http://localhost:3000/");
 });
