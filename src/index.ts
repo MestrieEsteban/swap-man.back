@@ -14,7 +14,7 @@ const io = require('socket.io')(httpServer, {
 	allowEIO3: true
 });
 
-app.set("port", process.env.PORT || 3000);
+app.set("port", 3000);
 
 app.get("/", (req: any, res: any) => {
 	res.sendFile(path.resolve("./src/client/index.html"));
@@ -49,8 +49,8 @@ io.on("connection", function (socket: any) {
 
 
 
-	socket.on("SenderUp", function (room: string, type: string) {	
-			
+	socket.on("SenderUp", function (room: string, type: string) {
+
 		socket.to(room).emit("Up", type)
 	})
 	socket.on("SenderDown", function (room: string, type: string) {
