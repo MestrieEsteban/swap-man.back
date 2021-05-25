@@ -1,5 +1,6 @@
 import express from "express";
 import * as path from "path";
+import * as process from "process";
 
 const app = express();
 let httpServer = require("http").Server(app);
@@ -14,7 +15,7 @@ const io = require('socket.io')(httpServer, {
 	allowEIO3: true
 });
 
-//app.set("port", 3000);
+app.set("port", process.env.port || 3000);
 
 app.get("/", (req: any, res: any) => {
 	res.sendFile(path.resolve("./src/client/index.html"));
@@ -72,6 +73,6 @@ io.on('disconnect', function (socket: any) {
 	console.log(socket);
  	});
 
-const server = httpServer.listen(3000, function () {
+const server = httpServer.listen(process.env.port || 3000, function () {
 	console.log("listening on http://localhost:3000/");
 });
