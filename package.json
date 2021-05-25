@@ -4,8 +4,9 @@
   "description": "Esteban starter typescript",
   "main": "index.js",
   "engines": {
-    "node": "0.10.41",
-     "npm": "1.4.29"
+    "node": "12.18.2",
+     "npm": "7.5.4",
+    "yarn": "1.22.4"
    },
 
   "scripts": {
