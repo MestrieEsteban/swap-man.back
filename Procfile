@@ -1,1 +1,1 @@
-web: yarn dev
+web: bundle exec thin start
