@@ -14,7 +14,7 @@ const io = require('socket.io')(httpServer, {
 	allowEIO3: true
 });
 
-app.set("port", 3000);
+//app.set("port", 3000);
 
 app.get("/", (req: any, res: any) => {
 	res.sendFile(path.resolve("./src/client/index.html"));
