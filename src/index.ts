@@ -6,7 +6,7 @@ const port = process.env.port || 3000;
 const socketIO = require('socket.io');
 
 const app = express()
-	.use((req, res) => res.sendFile(path.resolve("./src/client/index.html")))
+	//.use((req, res) => res.sendFile(path.resolve("./src/client/index.html")))
 	.set("port", port)
 	.listen(port, function () {
 		console.log(`listening on http://localhost:${port}/`);
