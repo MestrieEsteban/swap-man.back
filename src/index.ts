@@ -48,6 +48,12 @@ io.on("connection", function (socket: any) {
 	socket.on("Player2Move", function (pacman: any, room: string) {
 		socket.to(room).emit("Player2Move", pacman)
 	});
+	socket.on("changeMap", function (room: any, map: string) {
+		socket.to(room).emit("changeMap", map)
+	});
+
+
+
 	socket.on("SenderUp", function (room: string, type: string) {
 		socket.to(room).emit("Up", type)
 	})
