@@ -2,10 +2,17 @@ import express from "express";
 import * as path from "path";
 import * as process from "process";
 
-const app = express();
-let httpServer = require("http").Server(app);
+const port = process.env.port || 3000;
+const socketIO = require('socket.io');
 
-const io = require('socket.io')(httpServer, {
+const app = express()
+	.use((req, res) => res.sendFile(path.resolve("./src/client/index.html")))
+	.set("port", port)
+	.listen(port, function () {
+		console.log(`listening on http://localhost:${port}/`);
+	});
+
+const io = socketIO(app, {
 	cors: {
 		origin: "http://localhost:8080",
 		methods: ["GET", "POST"],
@@ -13,12 +20,6 @@ const io = require('socket.io')(httpServer, {
 		credentials : true
 	},
 	allowEIO3: true
-});
-
-app.set("port", process.env.port || 3000);
-
-app.get("/", (req: any, res: any) => {
-	res.sendFile(path.resolve("./src/client/index.html"));
 });
 
 let rooms: any = {}
@@ -46,10 +47,6 @@ io.on("connection", function (socket: any) {
 		socket.to(room).emit("Player2Move", pacman)
 	});
 
-
-
-
-
 	socket.on("SenderUp", function (room: string, type: string) {
 
 		socket.to(room).emit("Up", type)
@@ -66,13 +63,8 @@ io.on("connection", function (socket: any) {
 	socket.on("SenderClear", function (room: string, type: string) {
 		socket.to(room).emit("Clear", type)
 	})
-
 });
 
 io.on('disconnect', function (socket: any) {
 	console.log(socket);
  	});
-
-const server = httpServer.listen(process.env.port || 3000, function () {
-	console.log("listening on http://localhost:3000/");
-});
