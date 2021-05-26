@@ -9,6 +9,9 @@
     "build": "yarn babel src/ --out-dir .build --extensions .ts --quiet",
     "start": "yarn build && node .build"
   },
+  "engines": {
+    "node": "14.x.x"
+  },
   "husky": {},
   "keywords": [],
   "author": "",
