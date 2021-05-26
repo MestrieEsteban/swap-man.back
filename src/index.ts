@@ -48,9 +48,6 @@ io.on("connection", function (socket: any) {
 	socket.on("Player2Move", function (pacman: any, room: string) {
 		socket.to(room).emit("Player2Move", pacman)
 	});
-	socket.on('disconnect', function (socket: any) {
-		console.log(socket);
-	});
 
 	socket.on("SenderUp", function (room: string, type: string) {
 
