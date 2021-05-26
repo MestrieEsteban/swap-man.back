@@ -9,7 +9,7 @@ const app = express()
 
 const io = socketIO(app, {
 	cors: {
-		origin: "https://swapmanfront.herokuapp.com/",
+		origin: "*",
 		methods: ["GET", "POST"],
 		transports: ['websocket', 'polling'],
 		credentials : true
