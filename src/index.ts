@@ -1,12 +1,10 @@
 import express from "express";
-import * as path from "path";
-import * as process from "process";
 
 const port = process.env.port || 3000;
 const socketIO = require('socket.io');
 
 const app = express()
-	 .use((req, res) => res.sendFile(path.resolve("./src/client/index.html")))
+	.use((req, res) => res.sendFile('/client/index.html', { root: __dirname }))
 	//.set("port", port)
 	.listen(port, () => console.log(`Listening on ${port}`));
 
@@ -58,4 +56,4 @@ io.on("connection", function (socket: any) {
 
 io.on('disconnect', function (socket: any) {
 	console.log(socket);
- 	});
+});
