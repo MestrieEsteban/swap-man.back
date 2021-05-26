@@ -6,21 +6,12 @@ const port = process.env.port || 3000;
 const socketIO = require('socket.io');
 
 const app = express()
-	//.use((req, res) => res.sendFile(path.resolve("./src/client/index.html")))
+	 .use((req, res) => res.sendFile(path.resolve("./src/client/index.html")))
 	//.set("port", port)
-	.listen(port, function () {
-		console.log(`listening on http://localhost:${port}/`);
-	});
+	.listen(port, () => console.log(`Listening on ${port}`));
 
-const io = socketIO(app, {
-	cors: {
-		origin: "http://localhost:8080",
-		methods: ["GET", "POST"],
-		transports: ['websocket', 'polling'],
-		credentials : true
-	},
-	allowEIO3: true
-});
+
+const io = socketIO(app);
 
 let rooms: any = {}
 
