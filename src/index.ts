@@ -7,8 +7,15 @@ const app = express()
 	.use((req, res) => res.sendFile('/client/index.html', { root: __dirname }))
 	.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
 
-
-const io = socketIO(app);
+const io = socketIO(app, {
+	cors: {
+		origin: "https://swapmanfront.herokuapp.com/",
+		methods: ["GET", "POST"],
+		transports: ['websocket', 'polling'],
+		credentials : true
+	},
+	allowEIO3: true
+});
 
 let rooms: any = {}
 
