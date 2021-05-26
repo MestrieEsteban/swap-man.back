@@ -1,6 +1,6 @@
 import express from "express";
 
-const PORT = process.env.port;
+const PORT = process.env.PORT || 3000;
 const socketIO = require('socket.io');
 
 const app = express()
