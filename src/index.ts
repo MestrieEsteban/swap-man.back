@@ -5,7 +5,7 @@ const socketIO = require('socket.io');
 
 const app = express()
 	.use((req, res) => res.sendFile('/client/index.html', { root: __dirname }))
-	.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
+	.listen(PORT, () => console.log(`Listening on https://swapmanback.herokuapp.com`));
 
 const io = socketIO(app, {
 	cors: {
