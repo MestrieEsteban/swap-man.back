@@ -1,12 +1,11 @@
 import express from "express";
 
-const port = process.env.port || 3000;
+const PORT = process.env.port;
 const socketIO = require('socket.io');
 
 const app = express()
-	//.use((req, res) => res.sendFile('/client/index.html', { root: __dirname }))
-	//.set("port", port)
-	.listen(port, () => console.log(`Listening on ${port}`));
+	.use((req, res) => res.sendFile('/client/index.html', { root: __dirname }))
+	.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
 
 
 const io = socketIO(app);
@@ -35,6 +34,9 @@ io.on("connection", function (socket: any) {
 	socket.on("Player2Move", function (pacman: any, room: string) {
 		socket.to(room).emit("Player2Move", pacman)
 	});
+	io.on('disconnect', function (socket: any) {
+		console.log(socket);
+	});
 
 	socket.on("SenderUp", function (room: string, type: string) {
 
@@ -52,8 +54,4 @@ io.on("connection", function (socket: any) {
 	socket.on("SenderClear", function (room: string, type: string) {
 		socket.to(room).emit("Clear", type)
 	})
-});
-
-io.on('disconnect', function (socket: any) {
-	console.log(socket);
 });
