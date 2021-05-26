@@ -20,6 +20,9 @@ const io = socketIO(app, {
 let rooms: any = {}
 
 io.on("connection", function (socket: any) {
+	socket.on('disconnect', function() {
+		console.log('Got disconnect!');
+	});
 	socket.on("createRoom", function (room: string, name: string) {
 		socket.join(room);
 		rooms[room] = { user1: name, user2: "" }
