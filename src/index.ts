@@ -27,10 +27,17 @@ io.on("connection", function (socket: any) {
 		io.in(room).emit('user', rooms[room])
 	});
 	socket.on("joinRoom", function (room: string, name: string) {
-		socket.join(room);
-		rooms[room].user2 = name
-		console.log(`${name} join room : ${room}`);
-		io.in(room).emit('user', rooms[room])
+		if (rooms[room]) {
+			socket.join(room);
+			rooms[room].user2 = name
+			console.log(`${name} join room : ${room}`);
+			io.in(room).emit('user', rooms[room])
+		} else {
+			socket.join(room);
+			rooms[room] = { user1: "", user2: name }
+			console.log(`${name} create room : ${room}`);
+			io.in(room).emit('user', rooms[room])
+		}
 	});
 	socket.on("startGame", function (room: string) {
 		io.in(room).emit('startGame')
@@ -41,7 +48,7 @@ io.on("connection", function (socket: any) {
 	socket.on("Player2Move", function (pacman: any, room: string) {
 		socket.to(room).emit("Player2Move", pacman)
 	});
-	io.on('disconnect', function (socket: any) {
+	socket.on('disconnect', function (socket: any) {
 		console.log(socket);
 	});
 
