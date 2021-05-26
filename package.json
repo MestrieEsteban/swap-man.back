@@ -3,12 +3,6 @@
   "version": "1.0.0",
   "description": "Esteban starter typescript",
   "main": "index.js",
-  "engines": {
-    "node": "12.18.2",
-     "npm": "7.5.4",
-    "yarn": "1.22.4"
-   },
-
   "scripts": {
     "dev": "nodemon",
     "clean": "yarn rimraf .build",
