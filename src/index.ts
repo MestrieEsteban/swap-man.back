@@ -34,7 +34,7 @@ io.on("connection", function (socket: any) {
 			io.in(room).emit('user', rooms[room])
 		} else {
 			socket.join(room);
-			rooms[room] = { user1: "", user2: name }
+			rooms[room] = { user1: name, user2: "" }
 			console.log(`${name} create room : ${room}`);
 			io.in(room).emit('user', rooms[room])
 		}
