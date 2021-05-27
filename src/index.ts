@@ -27,7 +27,12 @@ io.on("connection", function (socket: any) {
 		io.in(room).emit('user', rooms[room])
 	});
 	socket.on("joinRoom", function (room: string, name: string) {
+
 		if (rooms[room]) {
+			if (rooms[room].user2 != "") {
+				socket.emit("roomFull")
+				return
+			}
 			socket.join(room);
 			rooms[room].user2 = name
 			console.log(`${name} join room : ${room}`);
@@ -50,6 +55,10 @@ io.on("connection", function (socket: any) {
 	});
 	socket.on("changeMap", function (room: any, map: string) {
 		socket.to(room).emit("changeMap", map)
+	});
+	socket.on("deco", function (room: any) {
+		socket.to(room).emit("deco")
+		delete rooms[room]
 	});
 
 
