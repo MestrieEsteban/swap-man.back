@@ -1,4 +1,4 @@
-# 🐱‍👤 TypeScript Starter | 2020 Esteban Mestrie
+# 🐱‍👤
 
 ### Scripts
 
